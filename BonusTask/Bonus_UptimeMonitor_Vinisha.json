@@ -1,0 +1,146 @@
+{
+  "name": "Bonus_UptimeMonitor_Vinisha",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5383d905-ba14-4f41-b2fa-97d08f2a1e81",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://todomvc.com/examples/react/dist/",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "6b5c156b-5ab0-40b8-8f26-cf3adb52d980",
+      "name": "HTTP Request",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "64335a44-1dbb-4e9e-a1cf-2f10ddaf91bf",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "number",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "552164b9-870e-4b96-b751-7b32f8e9d704",
+      "name": "If",
+      "alwaysOutputData": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://discord.com/api/webhooks/1508723990422618283/tiuuQ5tt5P3TqMCQn0Igxf1pd-H5DDp0asmI9lVEduvEoUFA1XBZGagq0GmAy2fZwsmI",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"content\": \"❌ WEBSITE DOWN ALERT\\nThe monitored website is not responding with status code 200.\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        624,
+        -96
+      ],
+      "id": "03351078-22fa-4ea8-9016-07323fb4454c",
+      "name": "HTTP Request1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "93b99c64-9077-4a78-b331-bef5a6e4dbf1",
+  "meta": {
+    "instanceId": "f48fd8a95e330ae7792bfe0fd2e1b2b7fd9e67d45cac511878e67851549b36eb"
+  },
+  "id": "vDzavMzOSwXa4pku",
+  "tags": []
+}
